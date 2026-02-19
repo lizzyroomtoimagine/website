@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Room to Imagine | Interior Design & 3D Rendering</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Montserrat:wght@300;400;500&display=swap" rel="stylesheet">
+
+<style>
+    body {
+        margin: 0;
+        font-family: 'Montserrat', sans-serif;
+        background-color: #f4f7f6;
+        color: #2f3e3e;
+        line-height: 1.6;
+    }
+
+    header {
+        background: linear-gradient(rgba(46, 79, 79, 0.6), rgba(46, 79, 79, 0.6)),
+                    url('https://images.unsplash.com/photo-1505691723518-36a5ac3b2f7b');
+        background-size: cover;
+        background-position: center;
+        height: 90vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: white;
+        padding: 20px;
+    }
+
+    header h1 {
+        font-family: 'Playfair Display', serif;
+        font-size: 3rem;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+    }
+
+    header p {
+        font-size: 1.2rem;
+        font-weight: 300;
+    }
+
+    .btn {
+        margin-top: 25px;
+        display: inline-block;
+        padding: 12px 28px;
+        background-color: #7aa6a1;
+        color: white;
+        text-decoration: none;
+        border-radius: 30px;
+        transition: 0.3s ease;
+    }
+
+    .btn:hover {
+        background-color: #5f8c87;
+    }
+
+    section {
+        padding: 80px 10%;
+        text-align: center;
+    }
+
+    h2 {
+        font-family: 'Playfair Display', serif;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        color: #355f5c;
+    }
+
+    .services {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 40px;
+        margin-top: 40px;
+    }
+
+    .card {
+        background: white;
+        padding: 30px;
+        width: 280px;
+        border-radius: 12px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+    }
+
+    footer {
+        background-color: #2f3e3e;
+        color: white;
+        text-align: center;
+        padding: 30px 10px;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        header h1 {
+            font-size: 2.2rem;
+        }
+
+        .services {
+            flex-direction: column;
+            align-items: center;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <div>
+        <h1>Room to Imagine</h1>
+        <p>Interior Design & 3D Visualisation Studio</p>
+        <a href="#contact" class="btn">Start Your Project</a>
+    </div>
+</header>
+
+<section>
+    <h2>Design That Feels Like Home</h2>
+    <p>
+        We create calming, thoughtful spaces through carefully crafted interior design 
+        and realistic 3D renderings — helping you visualise your home before it’s built.
+    </p>
+</section>
+
+<section>
+    <h2>Our Services</h2>
+    <div class="services">
+        <div class="card">
+            <h3>Interior Design</h3>
+            <p>Concept development, layout planning, and curated material selections tailored to your lifestyle.</p>
+        </div>
+
+        <div class="card">
+            <h3>3D Rendering</h3>
+            <p>Photorealistic visuals that bring your ideas to life before construction begins.</p>
+        </div>
+
+        <div class="card">
+            <h3>Design Consultations</h3>
+            <p>Clear, practical guidance to help you make confident design decisions.</p>
+        </div>
+    </div>
+</section>
+
+<section id="contact">
+    <h2>Let’s Create Something Beautiful</h2>
+    <p>Email: hello@roomtoimagine.co.uk</p>
+</section>
+
+<footer>
+    © 2026 Room to Imagine | Designed with intention
+</footer>
+
+</body>
+</html>
