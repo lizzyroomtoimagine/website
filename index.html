@@ -3,896 +3,138 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Room to Imagine — Ultra-Realistic 3D Visualisation for Interior Decisions</title>
-  <meta name="description" content="Ultra-realistic 3D visualisation, technical elevations, cabinetry design, and lighting plans—so you can make confident interior decisions before you commit." />
-
-  <style>
-    :root{
-      --bg:#fbfaf7;
-      --surface:#ffffff;
-      --text:#141414;
-      --muted:#5a5a5a;
-      --line:rgba(20,20,20,.10);
-      --accent:#2e6f66;        /* muted green */
-      --accent2:#2f5f8a;       /* muted blue */
-      --shadow: 0 18px 50px rgba(0,0,0,.08);
-      --radius: 22px;
-      --max: 1120px;
-    }
-
-    *{ box-sizing:border-box; }
-    html{ scroll-behavior:smooth; }
-    body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      color:var(--text);
-      background:
-        radial-gradient(1200px 700px at 10% 5%, rgba(46,111,102,.10), transparent 60%),
-        radial-gradient(900px 600px at 90% 10%, rgba(47,95,138,.10), transparent 55%),
-        var(--bg);
-      line-height:1.45;
-    }
-    a{ color:inherit; text-decoration:none; }
-    .container{ width:min(var(--max), 92vw); margin-inline:auto; }
-
-    /* Top bar */
-    .topbar{
-      position:sticky; top:0; z-index:50;
-      backdrop-filter: blur(10px);
-      background: rgba(251,250,247,.72);
-      border-bottom:1px solid var(--line);
-    }
-    .topbar-inner{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 0;
-      gap:18px;
-    }
-    .brand{
-      display:flex; align-items:baseline; gap:10px;
-      font-weight:700;
-      letter-spacing:.2px;
-    }
-    .brand small{
-      font-weight:500;
-      color:var(--muted);
-      letter-spacing:.2px;
-    }
-    nav{
-      display:flex; gap:18px; align-items:center;
-      flex-wrap:wrap;
-      justify-content:flex-end;
-    }
-    nav a{
-      color:var(--muted);
-      font-weight:600;
-      font-size:14px;
-      padding:8px 10px;
-      border-radius:999px;
-    }
-    nav a:hover{ background:rgba(20,20,20,.05); color:var(--text); }
-    .btn{
-      display:inline-flex; align-items:center; justify-content:center;
-      gap:10px;
-      padding:12px 16px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background: var(--surface);
-      box-shadow: 0 8px 20px rgba(0,0,0,.06);
-      font-weight:700;
-      font-size:14px;
-      transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
-      white-space:nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); box-shadow: 0 12px 26px rgba(0,0,0,.08); border-color: rgba(20,20,20,.18); }
-    .btn-primary{
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      color:#fff;
-      border-color: transparent;
-      box-shadow: 0 18px 40px rgba(46,111,102,.22);
-    }
-    .btn-primary:hover{ box-shadow: 0 22px 52px rgba(47,95,138,.24); }
-    .btn-ghost{
-      background: transparent;
-      box-shadow:none;
-    }
-
-    /* Hero */
-    .hero{
-      padding: 64px 0 28px;
-    }
-    .hero-grid{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap: 26px;
-      align-items:stretch;
-    }
-    .pill{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:10px 12px;
-      border-radius:999px;
-      background: rgba(255,255,255,.65);
-      border:1px solid var(--line);
-      color:var(--muted);
-      font-weight:700;
-      font-size:13px;
-      width: fit-content;
-    }
-    .dot{
-      width:10px; height:10px; border-radius:99px;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 10px 18px rgba(46,111,102,.22);
-    }
-    h1{
-      margin:16px 0 10px;
-      font-size: clamp(34px, 3.4vw, 54px);
-      line-height:1.06;
-      letter-spacing:-.7px;
-    }
-    .lead{
-      margin: 0 0 18px;
-      color: var(--muted);
-      font-size: 18px;
-      max-width: 62ch;
-    }
-    .cta-row{ display:flex; gap:12px; flex-wrap:wrap; margin-top: 16px; }
-    .trust{
-      margin-top: 18px;
-      display:flex; gap:14px; flex-wrap:wrap;
-      color: var(--muted);
-      font-weight:700;
-      font-size:13px;
-      align-items:center;
-    }
-    .trust span{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 12px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background: rgba(255,255,255,.55);
-    }
-
-    /* Hero card */
-    .hero-card{
-      background: rgba(255,255,255,.65);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      position:relative;
-    }
-    .hero-card::before{
-      content:"";
-      position:absolute; inset:-2px -2px auto -2px;
-      height: 140px;
-      background: linear-gradient(135deg, rgba(46,111,102,.20), rgba(47,95,138,.18));
-      filter: blur(0px);
-    }
-    .hero-card-inner{
-      position:relative;
-      padding: 18px;
-    }
-    .mock{
-      margin-top: 12px;
-      background: #f1f0ea;
-      border:1px solid rgba(20,20,20,.10);
-      border-radius: 16px;
-      padding: 14px;
-      display:grid;
-      gap:10px;
-    }
-    .mock .row{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-    }
-    .ph{
-      border-radius: 14px;
-      border:1px solid rgba(20,20,20,.10);
-      background:
-        linear-gradient(135deg, rgba(46,111,102,.16), rgba(47,95,138,.14)),
-        radial-gradient(500px 300px at 30% 30%, rgba(255,255,255,.55), transparent 60%),
-        #eae8df;
-      height: 140px;
-      position:relative;
-      overflow:hidden;
-    }
-    .ph.tall{ height: 220px; }
-    .ph::after{
-      content:"Ultra-realistic render placeholder";
-      position:absolute;
-      left:12px; bottom:10px;
-      font-size: 12px;
-      color: rgba(20,20,20,.55);
-      font-weight:800;
-      letter-spacing:.2px;
-      background: rgba(255,255,255,.50);
-      border: 1px solid rgba(20,20,20,.08);
-      padding: 8px 10px;
-      border-radius: 999px;
-    }
-    .mini-stats{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:10px;
-      margin-top: 12px;
-    }
-    .stat{
-      background: rgba(255,255,255,.70);
-      border:1px solid var(--line);
-      border-radius: 16px;
-      padding: 12px;
-    }
-    .stat b{ display:block; font-size: 15px; }
-    .stat small{ color:var(--muted); font-weight:700; }
-
-    /* Sections */
-    section{ padding: 58px 0; }
-    .section-head{
-      display:flex; justify-content:space-between; align-items:flex-end; gap:18px; flex-wrap:wrap;
-      margin-bottom: 18px;
-    }
-    h2{
-      margin:0;
-      font-size: clamp(24px, 2.2vw, 34px);
-      letter-spacing:-.4px;
-      line-height:1.1;
-    }
-    .sub{
-      margin: 6px 0 0;
-      color:var(--muted);
-      font-size: 16px;
-      max-width: 68ch;
-    }
-
-    .grid-3{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
-    }
-    .card{
-      background: rgba(255,255,255,.72);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 14px 34px rgba(0,0,0,.06);
-    }
-    .card h3{ margin: 4px 0 8px; font-size: 16px; letter-spacing: -.2px; }
-    .card p{ margin:0; color:var(--muted); }
-    .icon{
-      width:40px; height:40px; border-radius: 14px;
-      display:grid; place-items:center;
-      background: linear-gradient(135deg, rgba(46,111,102,.18), rgba(47,95,138,.16));
-      border:1px solid rgba(20,20,20,.10);
-      font-weight:900;
-    }
-
-    /* Work gallery */
-    .gallery{
-      display:grid;
-      grid-template-columns: 1.2fr .8fr;
-      gap:14px;
-    }
-    .tile{
-      border-radius: var(--radius);
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.66);
-      box-shadow: 0 14px 34px rgba(0,0,0,.06);
-      overflow:hidden;
-      position:relative;
-      min-height: 240px;
-    }
-    .tile .img{
-      position:absolute; inset:0;
-      background:
-        radial-gradient(700px 340px at 30% 30%, rgba(255,255,255,.55), transparent 60%),
-        linear-gradient(135deg, rgba(46,111,102,.20), rgba(47,95,138,.18)),
-        #e7e5dc;
-      transform: scale(1.02);
-    }
-    .tile .label{
-      position:absolute; left:16px; bottom:16px; right:16px;
-      background: rgba(255,255,255,.72);
-      border:1px solid rgba(20,20,20,.10);
-      border-radius: 18px;
-      padding: 12px 12px;
-      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
-    }
-    .label b{ display:block; }
-    .label small{ color:var(--muted); font-weight:700; }
-
-    .stack{
-      display:grid;
-      gap:14px;
-    }
-
-    /* Process */
-    .steps{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
-      counter-reset: step;
-    }
-    .step{
-      background: rgba(255,255,255,.72);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 14px 34px rgba(0,0,0,.06);
-      position:relative;
-    }
-    .step::before{
-      counter-increment: step;
-      content: counter(step);
-      position:absolute;
-      top:16px; right:16px;
-      width:34px; height:34px;
-      border-radius: 12px;
-      display:grid; place-items:center;
-      font-weight:900;
-      color:#fff;
-      background: linear-gradient(135deg, var(--accent), var(--accent2));
-      box-shadow: 0 14px 30px rgba(46,111,102,.22);
-    }
-    .step h3{ margin: 6px 0 8px; font-size: 16px; }
-    .step p{ margin:0; color:var(--muted); }
-
-    /* Packages */
-    .price{
-      display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap:14px;
-    }
-    .pkg{
-      background: rgba(255,255,255,.74);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 14px 34px rgba(0,0,0,.06);
-      position:relative;
-    }
-    .pkg.featured{
-      border-color: rgba(46,111,102,.35);
-      box-shadow: 0 22px 60px rgba(46,111,102,.18);
-    }
-    .tag{
-      display:inline-flex;
-      padding:8px 10px;
-      border-radius: 999px;
-      border:1px solid var(--line);
-      background: rgba(255,255,255,.62);
-      color: var(--muted);
-      font-weight:800;
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
-    .pkg h3{ margin: 2px 0 8px; }
-    .from{
-      font-size: 22px;
-      font-weight:900;
-      letter-spacing:-.2px;
-      margin: 0 0 10px;
-    }
-    .from small{ font-size: 13px; font-weight:800; color:var(--muted); }
-    ul{
-      margin: 0;
-      padding-left: 18px;
-      color: var(--muted);
-      font-weight:650;
-    }
-    li{ margin: 8px 0; }
-
-    /* Testimonials */
-    .testimonials{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-    }
-    blockquote{
-      margin:0;
-      padding: 18px;
-      border-radius: var(--radius);
-      background: rgba(255,255,255,.72);
-      border:1px solid var(--line);
-      box-shadow: 0 14px 34px rgba(0,0,0,.06);
-    }
-    blockquote p{ margin:0 0 12px; color: var(--muted); font-weight:650; }
-    blockquote footer{
-      display:flex; align-items:center; gap:10px;
-      color: var(--text);
-      font-weight:900;
-    }
-    .avatar{
-      width:38px; height:38px; border-radius: 14px;
-      background: linear-gradient(135deg, rgba(46,111,102,.18), rgba(47,95,138,.16));
-      border:1px solid rgba(20,20,20,.10);
-    }
-
-    /* Contact */
-    .contact{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:14px;
-      align-items:stretch;
-    }
-    .form{
-      background: rgba(255,255,255,.72);
-      border:1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 18px;
-      box-shadow: 0 14px 34px rgba(0,0,0,.06);
-    }
-    label{ display:block; font-size: 13px; font-weight:800; color: var(--muted); margin: 12px 0 6px; }
-    input, textarea, select{
-      width:100%;
-      padding: 12px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(20,20,20,.14);
-      background: rgba(255,255,255,.75);
-      outline:none;
-      font-size: 14px;
-    }
-    textarea{ min-height: 120px; resize: vertical; }
-    input:focus, textarea:focus, select:focus{
-      border-color: rgba(46,111,102,.45);
-      box-shadow: 0 0 0 4px rgba(46,111,102,.10);
-    }
-    .note{
-      color: var(--muted);
-      font-weight:650;
-      margin-top: 10px;
-      font-size: 13px;
-    }
-
-    footer.site-footer{
-      padding: 26px 0 44px;
-      color: var(--muted);
-      border-top: 1px solid var(--line);
-      background: rgba(255,255,255,.30);
-    }
-    .footer-inner{
-      display:flex; justify-content:space-between; gap:14px; flex-wrap:wrap;
-      align-items:center;
-    }
-    .links{ display:flex; gap:12px; flex-wrap:wrap; font-weight:800; }
-    .links a{ padding:8px 10px; border-radius: 999px; border:1px solid var(--line); background: rgba(255,255,255,.55); }
-
-    /* Responsive */
-    @media (max-width: 940px){
-      .hero-grid{ grid-template-columns: 1fr; }
-      .gallery{ grid-template-columns: 1fr; }
-      .grid-3, .steps, .price{ grid-template-columns: 1fr; }
-      .testimonials{ grid-template-columns: 1fr; }
-      .contact{ grid-template-columns: 1fr; }
-      nav{ display:none; }
-      .topbar-inner{ justify-content:space-between; }
-    }
-  </style>
+  <title>Room to Imagine — Interior Visualisation</title>
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 
 <body>
-  <!-- Top Bar -->
-  <header class="topbar" aria-label="Site header">
-    <div class="container topbar-inner">
-      <a class="brand" href="#top" aria-label="Room to Imagine home">
-        <span>Room to Imagine</span>
-        <small>3D Visualisation Studio</small>
-      </a>
+  <header class="header">
+    <div class="container">
+      <nav class="nav">
+        <a class="brand" href="index.html">
+          <img src="assets/img/brand/logo-primary.png" alt="Room to Imagine logo" />
+        </a>
 
-      <nav aria-label="Primary navigation">
-        <a href="#work">Work</a>
-        <a href="#services">Services</a>
-        <a href="#process">Process</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
+        <div class="navlinks">
+          <a class="active" href="index.html">Home</a>
+          <a href="portfolio.html">Portfolio</a>
+          <a href="services.html">Services</a>
+          <a href="about.html">About</a>
+          <a href="contact.html" class="btn primary">Get in touch</a>
+        </div>
       </nav>
-
-      <a class="btn btn-primary" href="#contact" aria-label="Book a discovery call">
-        Book a Discovery Call →
-      </a>
     </div>
   </header>
 
-  <!-- Hero -->
-  <main id="top" class="hero">
-    <div class="container hero-grid">
-      <div>
-        <div class="pill"><span class="dot"></span> Ultra-realistic visuals, before you commit</div>
-        <h1>Make interior decisions with confidence—<br />before you spend a penny.</h1>
-        <p class="lead">
-          Room to Imagine creates <b>ultra-realistic 3D visualisations</b>, <b>technical elevations</b>, <b>cabinetry design</b>,
-          and <b>lighting plans</b>—so you can see the outcome clearly and choose what works (and what doesn’t) before you commit.
-        </p>
+  <main>
+    <section class="hero">
+      <div class="container heroGrid">
+        <div>
+          <div class="kicker">✦ Thoughtfully visualised • calm, cottage-led spaces</div>
+          <h1>See your home before it becomes reality.</h1>
+          <p class="lede">
+            Interior visualisations and design guidance with a warm, lived-in cottage feel —
+            raw oak, soft neutrals, gentle greens, and the details that make a house feel like home.
+          </p>
 
-        <div class="cta-row">
-          <a class="btn btn-primary" href="#work">View Portfolio</a>
-          <a class="btn" href="#services">Explore Services</a>
-          <a class="btn btn-ghost" href="#contact">Get a Quote</a>
+          <div class="heroCtas">
+            <a class="btn primary" href="portfolio.html">View portfolio</a>
+            <a class="btn" href="services.html">How it works</a>
+          </div>
+
+          <div class="oakBar" aria-hidden="true"></div>
         </div>
 
-        <div class="trust" aria-label="Trust and scope">
-          <span>✨ Interiors first (not architecture)</span>
-          <span>🛋️ Rooms, renovations &amp; cabinetry</span>
-          <span>💡 Lighting considered early</span>
+        <div class="card heroCard gingham">
+          <div class="heroImage">
+            <img src="assets/img/brand/banner-hero.jpg" alt="Room to Imagine mood banner" />
+          </div>
         </div>
       </div>
+    </section>
 
-      <aside class="hero-card" aria-label="Preview card">
-        <div class="hero-card-inner">
-          <b style="display:block; font-size:14px; letter-spacing:.2px;">Preview your space</b>
-          <small style="color:var(--muted); font-weight:700;">
-            Replace these placeholders with your renders later.
-          </small>
+    <section class="section">
+      <div class="container">
+        <div class="titleBar ticking">
+          <div>
+            <h2>What I can help with</h2>
+            <p>Visuals, layout clarity, and gentle guidance — keeping the warmth, texture and charm.</p>
+          </div>
+          <div class="starDivider" aria-hidden="true">✦</div>
+        </div>
 
-          <div class="mock" role="img" aria-label="Render placeholders">
-            <div class="ph tall"></div>
-            <div class="row">
-              <div class="ph"></div>
-              <div class="ph"></div>
-            </div>
+        <div class="grid3">
+          <div class="card feature">
+            <div class="pill">✦</div>
+            <h3>3D Interior Visualisation</h3>
+            <p>Light, materials and layout — so you can feel confident before you buy or build.</p>
           </div>
 
-          <div class="mini-stats" aria-label="Key outcomes">
-            <div class="stat">
-              <b>Clear choices</b>
-              <small>Compare options</small>
-            </div>
-            <div class="stat">
-              <b>Fewer mistakes</b>
-              <small>Buy once</small>
-            </div>
-            <div class="stat">
-              <b>Confident plan</b>
-              <small>Move forward</small>
-            </div>
+          <div class="card feature">
+            <div class="pill">✦</div>
+            <h3>Design Direction</h3>
+            <p>A calm plan for colours, textures and finishes (oak, linens, gentle pattern).</p>
+          </div>
+
+          <div class="card feature">
+            <div class="pill">✦</div>
+            <h3>Finishing Details</h3>
+            <p>Those cottage touches — ticking stripes, gingham hints, and wildflower softness.</p>
           </div>
         </div>
-      </aside>
-    </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="titleBar">
+          <div>
+            <h2>Recent work</h2>
+            <p>Swap these placeholders for your renders as you go.</p>
+          </div>
+          <div class="starDivider" aria-hidden="true">✦</div>
+        </div>
+
+        <div class="gallery">
+          <a class="tile" href="portfolio.html">
+            <img src="assets/img/portfolio/project-1.jpg" alt="Project 1" />
+            <div class="caption">
+              <b>Kitchen visual</b>
+              <p>Warm whites, oak, soft brass details.</p>
+            </div>
+          </a>
+
+          <a class="tile" href="portfolio.html">
+            <img src="assets/img/portfolio/project-2.jpg" alt="Project 2" />
+            <div class="caption">
+              <b>Snug / living room</b>
+              <p>Layered neutrals, gentle greens, cottage texture.</p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
   </main>
 
-  <!-- Services highlights -->
-  <section id="services" aria-label="Services overview">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2>What I deliver</h2>
-          <p class="sub">
-            Everything you need to make informed interior decisions—presented clearly, beautifully, and ready to action.
-          </p>
-        </div>
-        <a class="btn" href="#contact">Tell me your project →</a>
-      </div>
-
-      <div class="grid-3">
-        <div class="card">
-          <div class="icon">3D</div>
-          <h3>Ultra-realistic 3D visualisation</h3>
-          <p>Photoreal renders that let you test finishes, furniture, colours, and mood—so you can commit with certainty.</p>
-        </div>
-        <div class="card">
-          <div class="icon">⟂</div>
-          <h3>Technical elevations</h3>
-          <p>Clear elevations for joinery, wall features, and key details—helpful for quoting and avoiding confusion on site.</p>
-        </div>
-        <div class="card">
-          <div class="icon">▦</div>
-          <h3>Cabinetry design</h3>
-          <p>Built-in layouts that balance function and aesthetics—storage, proportions, and finishes resolved before build.</p>
-        </div>
-        <div class="card">
-          <div class="icon">💡</div>
-          <h3>Lighting plan</h3>
-          <p>Lighting mapped with intention—layers, placement, and ambience—so the room works day to night.</p>
-        </div>
-        <div class="card">
-          <div class="icon">✓</div>
-          <h3>Decision-ready options</h3>
-          <p>Compare “Option A vs B” visually—ideal when you’re stuck between layouts, materials, or cabinetry styles.</p>
-        </div>
-        <div class="card">
-          <div class="icon">✦</div>
-          <h3>Interior-led guidance</h3>
-          <p>Interior design focus (not architecture): how it looks, feels, and functions in real life—down to the details.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Work -->
-  <section id="work" aria-label="Portfolio highlights">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2>Recent work</h2>
-          <p class="sub">
-            A few example project types. Swap the titles to match your own portfolio projects.
-          </p>
-        </div>
-        <a class="btn" href="#contact">Request a sample pack →</a>
-      </div>
-
-      <div class="gallery">
-        <div class="tile">
-          <div class="img" aria-hidden="true"></div>
-          <div class="label">
-            <div>
-              <b>Calm open-plan living</b>
-              <small>3D render + layout direction</small>
-            </div>
-            <span style="color:var(--muted); font-weight:900;">→</span>
-          </div>
-        </div>
-
-        <div class="stack">
-          <div class="tile" style="min-height: 188px;">
-            <div class="img" aria-hidden="true"></div>
-            <div class="label">
-              <div>
-                <b>Built-in cabinetry</b>
-                <small>Joinery design + elevations</small>
-              </div>
-              <span style="color:var(--muted); font-weight:900;">→</span>
-            </div>
-          </div>
-
-          <div class="tile" style="min-height: 188px;">
-            <div class="img" aria-hidden="true"></div>
-            <div class="label">
-              <div>
-                <b>Lighting &amp; ambience</b>
-                <small>Layered lighting plan</small>
-              </div>
-              <span style="color:var(--muted); font-weight:900;">→</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-top:16px; display:flex; gap:12px; flex-wrap:wrap;">
-        <a class="btn" href="#contact">Enquire about your space →</a>
-        <a class="btn btn-ghost" href="#process">See the process</a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Process -->
-  <section id="process" aria-label="How it works">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2>How it works</h2>
-          <p class="sub">
-            Simple, collaborative, and designed to remove doubt. You’ll always know what’s next and what you’re choosing.
-          </p>
-        </div>
-      </div>
-
-      <div class="steps">
-        <div class="step">
-          <h3>Share your space + your decisions</h3>
-          <p>
-            Send photos, measurements (or plans), and what you’re stuck on—layout, cabinetry, finishes, lighting, or all of the above.
-          </p>
-        </div>
-        <div class="step">
-          <h3>Visualise options</h3>
-          <p>
-            I create ultra-realistic visuals and key elevations so you can compare options clearly and choose with confidence.
-          </p>
-        </div>
-        <div class="step">
-          <h3>Refine + finalise</h3>
-          <p>
-            We refine details until it feels right. You receive final renders and drawings that help you brief trades and purchase well.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Packages -->
-  <section aria-label="Packages">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2>Ways to work together</h2>
-          <p class="sub">
-            Use these as starting points. Replace the “From” prices when you’re ready, or remove pricing entirely.
-          </p>
-        </div>
-        <a class="btn" href="#contact">Ask for a tailored quote →</a>
-      </div>
-
-      <div class="price">
-        <div class="pkg">
-          <div class="tag">Best for one decision</div>
-          <h3>Decision Visual</h3>
-          <p class="from">From £___ <small>/ per room decision</small></p>
-          <ul>
-            <li>1 ultra-realistic render (option-focused)</li>
-            <li>Finish direction (materials/colour notes)</li>
-            <li>1 revision round</li>
-          </ul>
-        </div>
-
-        <div class="pkg featured">
-          <div class="tag">Most popular</div>
-          <h3>Room Visual Pack</h3>
-          <p class="from">From £___ <small>/ per room</small></p>
-          <ul>
-            <li>2–3 ultra-realistic renders</li>
-            <li>Technical elevations (as needed)</li>
-            <li>Lighting plan (key placements + layers)</li>
-            <li>2 revision rounds</li>
-          </ul>
-        </div>
-
-        <div class="pkg">
-          <div class="tag">For big projects</div>
-          <h3>Cabinetry + Detail Pack</h3>
-          <p class="from">From £___ <small>/ joinery area</small></p>
-          <ul>
-            <li>Cabinetry design + layout logic</li>
-            <li>Technical elevations for quoting/build</li>
-            <li>3D visuals to confirm finishes</li>
-            <li>Revision rounds tailored to scope</li>
-          </ul>
-        </div>
-      </div>
-
-      <p class="note" style="margin-top:12px;">
-        Tip: If you don’t want to show prices yet, remove the “From” lines and keep the deliverables.
-      </p>
-    </div>
-  </section>
-
-  <!-- Testimonials -->
-  <section aria-label="Testimonials">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2>What clients say</h2>
-          <p class="sub">Replace these with real reviews when you have them.</p>
-        </div>
-      </div>
-
-      <div class="testimonials">
-        <blockquote>
-          <p>“Seeing it in ultra-realistic 3D made the decision instant. We avoided a costly mistake and the room feels perfect.”</p>
-          <footer><span class="avatar" aria-hidden="true"></span> Homeowner — Renovation</footer>
-        </blockquote>
-        <blockquote>
-          <p>“The cabinetry elevations were so clear our joiner could quote confidently. The final built result matched the visuals.”</p>
-          <footer><span class="avatar" aria-hidden="true"></span> Client — Built-in joinery</footer>
-        </blockquote>
-      </div>
-    </div>
-  </section>
-
-  <!-- About -->
-  <section id="about" aria-label="About Room to Imagine">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2>Interiors, made calmer</h2>
-          <p class="sub">
-            I’m not an architecture service—this is interior-led visual clarity. The goal is simple: help you choose well, confidently, and early.
-          </p>
-        </div>
-      </div>
-
-      <div class="grid-3">
-        <div class="card">
-          <h3>Your USP, clearly</h3>
-          <p>
-            <b>Ultra-realistic visualisation before committing</b> means you can test ideas, spot issues, and feel certain—before purchases or trades begin.
-          </p>
-        </div>
-        <div class="card">
-          <h3>Decision support</h3>
-          <p>
-            Perfect if you’re torn between layouts, finishes, cabinetry styles, or lighting. You’ll see the options side-by-side in a way Pinterest can’t deliver.
-          </p>
-        </div>
-        <div class="card">
-          <h3>Designed to be actionable</h3>
-          <p>
-            Beautiful visuals are paired with clear technical elevations and lighting plans—so your project is easier to communicate and execute.
-          </p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact" aria-label="Contact and enquiry">
-    <div class="container">
-      <div class="section-head">
-        <div>
-          <h2>Tell me what you’re working on</h2>
-          <p class="sub">
-            Share your room, your goals, and where you feel stuck. I’ll reply with the best package suggestion and next steps.
-          </p>
-        </div>
-      </div>
-
-      <div class="contact">
-        <div class="form">
-          <form onsubmit="event.preventDefault(); alert('This demo form does not send yet. Connect it to your email service or website builder form handler.');">
-            <label for="name">Name</label>
-            <input id="name" name="name" placeholder="Your name" autocomplete="name" required />
-
-            <label for="email">Email</label>
-            <input id="email" name="email" type="email" placeholder="you@example.com" autocomplete="email" required />
-
-            <label for="service">What do you need?</label>
-            <select id="service" name="service" required>
-              <option value="" selected disabled>Select one…</option>
-              <option>Ultra-realistic 3D visualisation</option>
-              <option>Technical elevations</option>
-              <option>Cabinetry design</option>
-              <option>Lighting plan</option>
-              <option>All of the above</option>
-            </select>
-
-            <label for="message">Project details</label>
-            <textarea id="message" name="message" placeholder="Room type, rough dimensions, your style, and the decisions you need help with…"></textarea>
-
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:14px;">
-              <button class="btn btn-primary" type="submit">Send enquiry →</button>
-              <a class="btn" href="mailto:hello@roomtoimagine.co.uk">Email instead</a>
-            </div>
-
-            <p class="note">
-              You can add a line here like: “Typical turnaround: 1–2 weeks depending on scope.” (Optional.)
-            </p>
-          </form>
-        </div>
-
-        <div class="card" style="padding:18px;">
-          <h3 style="margin:0 0 10px;">What to send for the best results</h3>
-          <ul>
-            <li>Photos or a quick video walkthrough</li>
-            <li>Measurements or any existing plans</li>
-            <li>Inspiration links (if you have them)</li>
-            <li>Your “stuck” decisions (layout / finishes / lighting / joinery)</li>
-          </ul>
-
-          <div style="margin-top:14px; border-top:1px solid var(--line); padding-top:14px;">
-            <h3 style="margin:0 0 8px;">Quick links</h3>
-            <div style="display:flex; gap:10px; flex-wrap:wrap;">
-              <a class="btn" href="#services">Services</a>
-              <a class="btn" href="#process">Process</a>
-              <a class="btn" href="#work">Work</a>
-            </div>
-          </div>
-
-          <div style="margin-top:14px; border-top:1px solid var(--line); padding-top:14px;">
-            <small style="color:var(--muted); font-weight:750;">
-              Replace “hello@roomtoimagine.co.uk” with your real email and add your Instagram/Pinterest links in the footer.
-            </small>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer class="site-footer" aria-label="Site footer">
-    <div class="container footer-inner">
+  <footer class="footer">
+    <div class="container footerGrid">
       <div>
-        <b style="color:var(--text);">Room to Imagine</b>
-        <div style="margin-top:6px;">Ultra-realistic 3D visualisation · Elevations · Cabinetry · Lighting</div>
+        <img src="assets/img/brand/logo-primary.png" alt="Room to Imagine" style="height:44px;width:auto" />
+        <p class="small">
+          Interior visualisation with a calm cottage sensibility — warm whites, soft sage, raw oak and thoughtful detail.
+        </p>
+        <p class="small">© <span id="year"></span> Room to Imagine</p>
       </div>
 
-      <div class="links" aria-label="Footer links">
-        <a href="#top">Back to top</a>
-        <a href="#" onclick="alert('Add your Instagram link here.'); return false;">Instagram</a>
-        <a href="#" onclick="alert('Add your Pinterest link here.'); return false;">Pinterest</a>
-        <a href="mailto:hello@roomtoimagine.co.uk">Email</a>
+      <div class="small">
+        <p><b>Enquiries</b></p>
+        <p><a href="contact.html">Contact form</a><br/>or email: hello@yourdomain.co.uk</p>
       </div>
     </div>
   </footer>
 
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
